@@ -13,7 +13,7 @@ knitr::opts_chunk$set(cache=TRUE, echo = TRUE)
 
 ## Problem Komiwoja¿era (ang. Travelling Salesman Problem)
 
-Poni¿szy skrypt jest rozwi¹zaniem zadañ z laboratorium Sztucznej inteligejncji bêd¹cego przedmiotem na kierunku Data Science na Politechnice Warszawskiej prowadzonego przez Ph.D. Kamila ¯bikowskiego.
+Poni¿szy skrypt jest rozwi¹zaniem zadañ z laboratorium Sztucznej inteligejncji bêd¹cego przedmiotem na kierunku Data Science w Politechnice Warszawskiej prowadzonego przez Ph.D. Kamila ¯bikowskiego [1].
 
 Celem æwiczenia jest rozwi¹zanie problemu komiwoja¿era (cyklu Hamiltona w pe³nym grafie wa¿onym) z wykorzystaniem algorytmów genetycznych.
 
@@ -83,13 +83,13 @@ permu(c('Belgrade','Berlin','Brussels','Bucharest','Budapest','Copenhagen','Dubl
 Teraz kiedy mamy ju¿ dosyæ dobre zrozumienie problemu zastanówmy siê nad jego
 z³o¿onoœci¹ obliczeniow¹ w zale¿noœci od liczby miast. Czy jesteœ w stanie podaæ
 aproksymacjê z³o¿onoœci? Skorzystaj w tym celu z funkcji “factorial”.  
-**Z³o¿onoœæ mo¿na okreœliæ jako [1]:  
+**Z³o¿onoœæ mo¿na okreœliæ jako [2]:  
 Startuj¹c z pierwszego miasta mamy (n-1) miast do wyboru, z drugiego (n-2) miast do wyboru i tak dalej (n-1)(n-2)(n-3)...x3x2x1  
 itd. Jako, ¿e koszt przejazdu mierzony jest w jedn¹ stronê dzielimi wszystko przez dwa i finalnie:  
 (n-1)!/2**
 
 ## Zadanie 5
-W tym i kolejnych zadaniach korzystaæ bêdziemy z funkcji z biblioteki “GA”[1]. Zainstaluj i
+W tym i kolejnych zadaniach korzystaæ bêdziemy z funkcji z biblioteki “GA”[3]. Zainstaluj i
 za³aduj j¹ przy pomocy poleceñ:
 
 ```{r, warning=F}
@@ -123,21 +123,28 @@ GA.fit <- ga(
   ,min = 1
   ,max = length(cities)
   ,maxiter = 500)
-min(GA.fit@fitness)
+GA.fit@fitnessValue
 plot(GA.fit)
 ```
   
 a) Czy zauwa¿y³eœ problem z tak¹ definicj¹ zmiennych decyzyjnych w kontekœcie  
-badanego problemu? Jak¹ faktycznie z³o¿onoœæ ma takie podejœcie?
+badanego problemu? Jak¹ faktycznie z³o¿onoœæ ma takie podejœcie?  
+**Szczególnymi warunkami tego problemu s¹ wymagania aby ka¿de miejsce zostanie odwiedzone tylko raz. Jeœli nie bêdziemy mieli któregoœ z miast lub pojawi siê ono dwa razy to nie spe³nimy warunków zagadnienia **
 b) Zwróæ uwagê na fakt, i¿ zastosowanie operatorów krzy¿owania i mutacji w wersji
 podstawowej spowodowa³oby z³amanie warunków okreœlonych dla zmiennych
 decyzyjnych.  
-c) * Zaproponuj operator mutacji dla omawianego problemu.  
-d) * Zaproponuj operator krzy¿owania dla omawianego problemu.  
 
-[1] http://www.math.uwaterloo.ca/tsp/problem/pcb3cnt.html  
-[2] Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R.
+c) * Zaproponuj operator mutacji dla omawianego problemu.  
+**Przedewszystkim powinniœmy zapewniæ aby mutacja odbywa³a siê poprzez tasowanie a nie losowanie które mog³oby prowadziæ do niespe³nienia za³o¿eñ problemu. Jednym z rozwi¹zañ [4] jest Mutacja Wymiany (ang. Swamp Mutation). W tej metodzie dwa losowo wybrane elementy (miasta) s¹ zamieniane ze sob¹ miejscami**
+d) * Zaproponuj operator krzy¿owania dla omawianego problemu.  
+**Jednym ze sposobów jest Krzy¿owanie Posortowane [4] (ang. Ordered Crossover). Wybieramy pozdzbiór kolejnych miast od rodzica a nastêpnie dodajemy go do dzieci. Jakiekolwiek brakuj¹ce wartoœci dodawane s¹ z innego rodzica z zachowaniem kolejnoœci przy omijaniu powtarzaj¹cych siê miast z rodzica pierwszego.**
+
+## Bibliografia
+[1] K.¯bikowski, Materia³y do laboratorium ze Sztucznej Inteligencji, Politechnika Warszawska, 2017  
+[2] http://www.math.uwaterloo.ca/tsp/problem/pcb3cnt.html  
+[3] Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R.
   Journal of Statistical Software, 53(4), 1-37. URL
-  http://www.jstatsoft.org/v53/i04/.
+  http://www.jstatsoft.org/v53/i04/.  
+[4] http://www.theprojectspot.com/tutorial-post/applying-a-genetic-algorithm-to-the-travelling-salesman-problem/5
 
 
