@@ -1,5 +1,5 @@
 ---
-title: "Traveling Salesman Problem - Genetic Algorithm"
+title: "Travelling Salesman Problem - Genetic Algorithm"
 author: "Ludwik Przyrowski"
 date: "9 kwietnia 2017"
 output:
@@ -8,24 +8,75 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE, echo = TRUE)
 ```
 
-## Problem komiwoja¿era
+## Problem Komiwoja¿era (ang. Travelling Salesman Problem)
 
 Poni¿szy skrypt jest rozwi¹zaniem zadañ z laboratorium Sztucznej inteligejncji bêd¹cego przedmiotem na kierunku Data Science na Politechnice Warszawskiej prowadzonego przez Ph.D. Kamila ¯bikowskiego.
 
+Celem æwiczenia jest rozwi¹zanie problemu komiwoja¿era (cyklu Hamiltona w pe³nym grafie wa¿onym) z wykorzystaniem algorytmów genetycznych.
 
-```{r cars}
-summary(cars)
+## Zadanie 1
+```{r }
+cities = read.csv("data/cities.csv", header = TRUE, sep=",")
+head(cities)
 ```
 
-## Including Plots
+## Zadanie 2
+Napisz funkcjê, która obliczy dystans pomiêdzy wszystkimi odwiedzanymi miastami.
 
-You can also embed plots, for example:
+Funkcja przyjmuje dwa parametry:  
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+* visitedCities - wektor od d³ugoœci k, gdzie k to liczba odwiedzonych miast;
+kolejnoœæ wartoœci w ramach tego wektora bêdzie odzwierciedla³a kolejnoœæ
+odwiedzania miast,
+
+* distances - macierz odleg³oœci miêdzy dowolnymi dwoma miastami
+```{r}
+totalDistance = function(visitedCities, distances=cities) {
+visitedCities = c(visitedCities, visitedCities[1])
+route = embed(visitedCities, 2)[, 2:1]
+distancesSum = sum(distances[route])
+return(distancesSum)
+}
 ```
+szybki test:
+```{r}
+totalDistance(c('Warsaw', 'London'))
+```
+## Zadanie 3
+Zastanówmy siê nad rozwi¹zaniem, które przeszukiwa³oby przestrzeñ wszystkich mo¿liwych po³¹czeñ pomiêdzy miastami. W tym celu skorzystaj z poni¿szej funkcji:
+```{r}
+permu <- function(perm, fun, current=NULL){
+  for(i in 1: length(perm)){
+    fix <- c(current, perm[i]) # calculated elements; fix at this point
+    rest <- perm[-i] # elements yet to permutate
+    #Call callback.
+    if(!length(rest)){
+      result <- fun(fix)
+    if(result<bestResult){
+      assign("bestResult", result, envir = .GlobalEnv)
+      print(bestResult)
+      }
+    }
+    if(length(rest)){
+      result <- permu(rest, fun, fix)
+    }
+  }
+}
+```
+Funkcja “permu” korzysta ze zmiennej globalnej bestResults zdefiniowanej jako:
+```{r}
+bestResult <- 99999
+```
+(Definiowanie i korzystanie ze zmiennych globalnych jest antywzorcem)
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+**Wywo³aj funkcjê “permu” dla fun=totalDistance i podaj adekwatn¹ wartoœæ parametru
+“perm” tak, aby przeszukiwana by³a ca³a przestrzeñ rozwi¹zañ.**
+```{r}
+permu(c('Belgrade','Berlin','Brussels','Bucharest','Budapest','Copenhagen','Dublin', 'Hamburg'), totalDistance)
+```
+Widaæ, ¿e obliczenia trwaj¹ bardzo d³ugo wiêc przyk³ad tylko dla ograniczonej listy
+
+
