@@ -1,10 +1,10 @@
 ---
-title: "Travelling Salesman Problem - Genetic Algorithm"
+title: "Problem Komiwoja¿era - Algorytmy Genetyczne"
 author: "Ludwik Przyrowski"
 date: "9 kwietnia 2017"
 output:
-  html_document: default
   pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -75,7 +75,9 @@ bestResult <- 99999
 Wywo³aj funkcjê “permu” dla fun=totalDistance i podaj adekwatn¹ wartoœæ parametru
 “perm” tak, aby przeszukiwana by³a ca³a przestrzeñ rozwi¹zañ.
 ```{r}
-permu(c('Belgrade','Berlin','Brussels','Bucharest','Budapest','Copenhagen','Dublin', 'Hamburg'), totalDistance)
+permu(c('Belgrade','Berlin','Brussels','Bucharest',
+        'Budapest','Copenhagen','Dublin', 'Hamburg')
+      , totalDistance)
 ```
 **Widaæ, ¿e obliczenia trwaj¹ bardzo d³ugo wiêc przyk³ad tylko dla ograniczonej listy**
 
