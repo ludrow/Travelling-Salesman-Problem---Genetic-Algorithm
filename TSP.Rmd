@@ -72,11 +72,72 @@ bestResult <- 99999
 ```
 (Definiowanie i korzystanie ze zmiennych globalnych jest antywzorcem)
 
-**Wywo³aj funkcjê “permu” dla fun=totalDistance i podaj adekwatn¹ wartoœæ parametru
-“perm” tak, aby przeszukiwana by³a ca³a przestrzeñ rozwi¹zañ.**
+Wywo³aj funkcjê “permu” dla fun=totalDistance i podaj adekwatn¹ wartoœæ parametru
+“perm” tak, aby przeszukiwana by³a ca³a przestrzeñ rozwi¹zañ.
 ```{r}
 permu(c('Belgrade','Berlin','Brussels','Bucharest','Budapest','Copenhagen','Dublin', 'Hamburg'), totalDistance)
 ```
-Widaæ, ¿e obliczenia trwaj¹ bardzo d³ugo wiêc przyk³ad tylko dla ograniczonej listy
+**Widaæ, ¿e obliczenia trwaj¹ bardzo d³ugo wiêc przyk³ad tylko dla ograniczonej listy**
+
+## Zadanie 4
+Teraz kiedy mamy ju¿ dosyæ dobre zrozumienie problemu zastanówmy siê nad jego
+z³o¿onoœci¹ obliczeniow¹ w zale¿noœci od liczby miast. Czy jesteœ w stanie podaæ
+aproksymacjê z³o¿onoœci? Skorzystaj w tym celu z funkcji “factorial”.  
+**Z³o¿onoœæ mo¿na okreœliæ jako [1]:  
+Startuj¹c z pierwszego miasta mamy (n-1) miast do wyboru, z drugiego (n-2) miast do wyboru i tak dalej (n-1)(n-2)(n-3)...x3x2x1  
+itd. Jako, ¿e koszt przejazdu mierzony jest w jedn¹ stronê dzielimi wszystko przez dwa i finalnie:  
+(n-1)!/2**
+
+## Zadanie 5
+W tym i kolejnych zadaniach korzystaæ bêdziemy z funkcji z biblioteki “GA”[1]. Zainstaluj i
+za³aduj j¹ przy pomocy poleceñ:
+
+```{r, warning=F}
+library(GA)
+```
+… wprowadzenie do Algorytmów Genetycznych
+
+## Zadanie 6
+Zaproponuj funkcjê kosztu dla algorytmu genetycznego.
+** Najprostrza funkcja do minimalizacji to -1 x koszt podró¿y
+
+```{r}
+
+costFunction <-function(cfVisitedCities, ...){
+  -(totalDistance(cfVisitedCities,...))
+}
+```
+
+## Zadanie 7
+Skorzystaj z funkcji “ga” w celu wybrania optymalnej wartoœci trasy z ograniczon¹ liczb¹
+iteracji do 500. Zapoznaj siê z parametryzacj¹ funkcji “min”, “max” oraz “maxiter”. Ustaw
+typ parametryzacji na “permutation”. Zapoznaj siê z innymi typami zmiennych
+decyzyjnych.
+Zak³adaj¹c, ¿e GA.fit zawiera wynik wykonania funkcji “ga” sprawdŸ najlepsze
+rozwi¹zanie oraz narysuj wykres dochodzenia do rozwi¹zania przez algorytm
+genetyczny.
+```{r}
+GA.fit <- ga(
+  type = "permutation"
+  ,fitness = costFunction
+  ,min = 1
+  ,max = length(cities)
+  ,maxiter = 500)
+min(GA.fit@fitness)
+plot(GA.fit)
+```
+  
+a) Czy zauwa¿y³eœ problem z tak¹ definicj¹ zmiennych decyzyjnych w kontekœcie  
+badanego problemu? Jak¹ faktycznie z³o¿onoœæ ma takie podejœcie?
+b) Zwróæ uwagê na fakt, i¿ zastosowanie operatorów krzy¿owania i mutacji w wersji
+podstawowej spowodowa³oby z³amanie warunków okreœlonych dla zmiennych
+decyzyjnych.  
+c) * Zaproponuj operator mutacji dla omawianego problemu.  
+d) * Zaproponuj operator krzy¿owania dla omawianego problemu.  
+
+[1] http://www.math.uwaterloo.ca/tsp/problem/pcb3cnt.html  
+[2] Luca Scrucca (2013). GA: A Package for Genetic Algorithms in R.
+  Journal of Statistical Software, 53(4), 1-37. URL
+  http://www.jstatsoft.org/v53/i04/.
 
 
