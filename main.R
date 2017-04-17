@@ -1,0 +1,10 @@
+library(ggmap)
+# europe <- c(left = -15, bottom = 30, right = 35, top = 63)
+# map <- get_stamenmap(europe, zoom = 4, maptype = "toner-background")
+# ggmap(map)
+
+cities = read.csv("data/cities.csv", header = TRUE, sep=",")
+cities.points <- c( list(names(cities)), geocode(names(cities)))
+df.cities <- data.frame(cities.points)
+names(df.cities) <- c('cities','lon','lat')
+qmplot(lon, lat, data= df.cities,zoom = 5, maptype = "toner-background", color = I("red"))
